@@ -1,0 +1,186 @@
+/*
+ * This file is part of LiquidLauncher (https://github.com/CCBlueX/LiquidLauncher)
+ *
+ * Copyright (c) 2015 - 2024 CCBlueX
+ *
+ * LiquidLauncher is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LiquidLauncher is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LiquidLauncher. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+use std::{collections::HashMap, path::Path};
+
+use crate::minecraft::java::DistributionSelection;
+use crate::{auth::ClientAccount, minecraft::auth::MinecraftAccount};
+use anyhow::Result;
+use rand::distr::{Alphanumeric, SampleString};
+use serde::{Deserialize, Serialize};
+use tokio::fs;
+use tracing::info;
+
+#[derive(Serialize, Deserialize)]
+pub(crate) struct Options {
+    #[serde(rename = "start")]
+    pub start_options: StartOptions,
+    #[serde(rename = "version")]
+    pub version_options: VersionOptions,
+    #[serde(rename = "launcher")]
+    pub launcher_options: LauncherOptions,
+    #[serde(rename = "premium")]
+    pub premium_options: PremiumOptions,
+}
+
+#[derive(Serialize, Deserialize)]
+pub(crate) struct StartOptions {
+    #[serde(rename = "account")]
+    pub minecraft_account: Option<MinecraftAccount>,
+    #[serde(rename = "customDataPath", default)]
+    pub custom_data_path: String,
+    #[serde(rename = "javaDistribution", default)]
+    pub java_distribution: DistributionSelection,
+    #[serde(rename = "jvmArgs", default)]
+    pub jvm_args: Option<Vec<String>>,
+    #[serde(rename = "memory", default = "default_memory")]
+    pub memory: u64,
+    #[serde(rename = "installation", default)]
+    pub installation: MinecraftInstallationOptions,
+}
+
+#[derive(Clone, Serialize, Deserialize, Default)]
+pub struct MinecraftInstallationOptions {
+    #[serde(rename = "customPath", default)]
+    pub custom_path: String,
+    #[serde(rename = "useVanillaSaves", default)]
+    pub use_vanilla_saves: bool,
+    #[serde(rename = "useVanillaResourcePacks", default)]
+    pub use_vanilla_resource_packs: bool,
+    #[serde(rename = "useVanillaShaderPacks", default)]
+    pub use_vanilla_shader_packs: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+pub(crate) struct VersionOptions {
+    #[serde(rename = "buildId", default)]
+    pub build_id: i32,
+    #[serde(rename = "options", default)]
+    pub options: HashMap<String, BranchOptions>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub(crate) struct LauncherOptions {
+    #[serde(rename = "firstRun", default)]
+    pub first_run: bool,
+    #[serde(rename = "showNightlyBuilds")]
+    pub show_nightly_builds: bool,
+    #[serde(rename = "concurrentDownloads")]
+    pub concurrent_downloads: u32,
+    #[serde(rename = "keepLauncherOpen")]
+    pub keep_launcher_open: bool,
+    #[serde(rename = "sessionToken", default = "random_token")]
+    pub session_token: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub(crate) struct PremiumOptions {
+    #[serde(rename = "account")]
+    pub account: Option<ClientAccount>,
+    #[serde(rename = "skipAdvertisement", default)]
+    pub skip_advertisement: bool,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub(crate) struct BranchOptions {
+    #[serde(rename = "modStates", default)]
+    pub mod_states: HashMap<String, bool>,
+    #[serde(rename = "customModStates", default)]
+    pub custom_mod_states: HashMap<String, bool>,
+}
+
+impl Options {
+    pub async fn load(app_data: &Path) -> Result<Self> {
+        let file_content = fs::read(app_data.join("options.json")).await?;
+
+        if let Ok(options) = serde_json::from_slice::<Self>(&file_content) {
+            info!("Successfully loaded options from file");
+            return Ok(options);
+        }
+        Ok(serde_json::from_slice::<Self>(&file_content)?)
+    }
+
+    pub async fn store(&self, app_data: &Path) -> Result<()> {
+        // store the options in the file
+        fs::write(app_data.join("options.json"), serde_json::to_string(&self)?).await?;
+        Ok(())
+    }
+}
+
+impl Default for StartOptions {
+    fn default() -> Self {
+        Self {
+            minecraft_account: None,
+            java_distribution: DistributionSelection::default(),
+            custom_data_path: String::new(),
+            jvm_args: None,
+            memory: 4096,
+            installation: MinecraftInstallationOptions::default(),
+        }
+    }
+}
+
+impl Default for VersionOptions {
+    fn default() -> Self {
+        Self {
+            build_id: -1,
+            options: HashMap::new(),
+        }
+    }
+}
+
+impl Default for LauncherOptions {
+    fn default() -> Self {
+        Self {
+            first_run: true,
+            show_nightly_builds: false,
+            keep_launcher_open: false,
+            concurrent_downloads: 10,
+            session_token: random_token()
+        }
+    }
+}
+
+impl Default for PremiumOptions {
+    fn default() -> Self {
+        Self {
+            account: None,
+            skip_advertisement: false,
+        }
+    }
+}
+
+impl Default for Options {
+    fn default() -> Self {
+        Self {
+            start_options: StartOptions::default(),
+            version_options: VersionOptions::default(),
+            launcher_options: LauncherOptions::default(),
+            premium_options: PremiumOptions::default(),
+        }
+    }
+}
+
+fn default_memory() -> u64 {
+    4096
+}
+
+fn random_token() -> String {
+    Alphanumeric.sample_string(&mut rand::rng(), 16)
+}

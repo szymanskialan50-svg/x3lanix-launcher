@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X3LANIX LAUNCHER</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  CUSTOM TITLE BAR                      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-drag"></div>
+    <div class="titlebar-buttons">
+      <button class="titlebar-btn minimize" id="btn-minimize" title="Minimize">
+        <svg width="10" height="10" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+      </button>
+      <button class="titlebar-btn close" id="btn-close" title="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10">
+          <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: LANGUAGE SELECT               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-language" style="display:none">
+    <div class="dir-container">
+      <div class="dir-logo">
+        <svg class="logo-svg" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="30" stroke="white" stroke-width="4.5" stroke-dasharray="140 50"/>
+          <circle cx="55" cy="28" r="7" fill="white"/>
+          <path d="M25 40 Q40 15 55 40 Q40 30 25 40Z" fill="white" opacity="0.9"/>
+        </svg>
+      </div>
+      <h1 class="dir-title" data-i18n="lang_title">Wybierz język / Select language</h1>
+      <p class="dir-subtitle" data-i18n="lang_subtitle">Wybierz język dla klienta.</p>
+      
+      <div class="settings-lang-row" style="justify-content: center; margin-bottom: 24px;">
+        <button class="lang-btn-setup active" data-lang="PL">PL</button>
+        <button class="lang-btn-setup" data-lang="EN">EN</button>
+        <button class="lang-btn-setup" data-lang="RU">RU</button>
+      </div>
+
+      <button class="btn btn-primary dir-continue" id="btn-lang-continue" data-i18n="dir_continue">Kontynuuj</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: APP LOGIN                     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-app-login" style="display:none">
+    <div class="login-bg">
+      <div class="login-blob login-blob-1"></div>
+      <div class="login-blob login-blob-2"></div>
+      <div class="login-blob login-blob-3"></div>
+      <div class="login-blob login-blob-4"></div>
+      <div class="login-blob login-blob-5"></div>
+    </div>
+    <div class="login-card app-login-card">
+      <h2 class="login-title">App Login</h2>
+      <p class="login-subtitle">Log in to x3lanix</p>
+
+      <div class="login-input-row" style="margin-top: 30px;">
+        <input type="text" class="login-input" id="app-login-username" placeholder="Username..." maxlength="16" style="width: 100%;">
+      </div>
+
+      <div class="login-input-row" style="margin-top: 15px;">
+        <input type="password" class="login-input" id="app-login-password" placeholder="Password..." style="width: 100%;">
+      </div>
+
+      <div class="login-input-row" style="margin-top: 15px; justify-content: flex-start;">
+        <label style="color: var(--text-secondary); font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="app-login-remember" style="accent-color: var(--text-primary); cursor: pointer;">
+          Zapamiętaj mnie
+        </label>
+      </div>
+
+      <div class="login-buttons" style="margin-top: 25px;">
+        <button class="btn btn-primary" id="btn-app-login" style="width: 100%;">Log In</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: DIRECTORY SELECT              -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-directory" style="display:none">
+    <div class="dir-container">
+      <div class="dir-logo">
+        <!-- X3LANIX Moon Logo SVG -->
+        <svg class="logo-svg" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="30" stroke="white" stroke-width="4.5" stroke-dasharray="140 50"/>
+          <circle cx="55" cy="28" r="7" fill="white"/>
+          <path d="M25 40 Q40 15 55 40 Q40 30 25 40Z" fill="white" opacity="0.9"/>
+        </svg>
+      </div>
+      <h1 class="dir-title" data-i18n="dir_title">Wybierz lokalizację gry</h1>
+      <p class="dir-subtitle" data-i18n="dir_subtitle">Wybierz folder, w którym zostanie zainstalowany klient.</p>
+      <div class="dir-path-display" id="dir-path-display">
+        <span class="dir-path-text" id="dir-path-text">Nie wybrano folderu</span>
+      </div>
+      <button class="btn btn-outline" id="btn-select-dir" data-i18n="dir_select">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h5l2 2h5v7H2V4z" stroke="currentColor" stroke-width="1.5"/></svg>
+        Wybierz folder
+      </button>
+      <button class="btn btn-primary dir-continue" id="btn-dir-continue" data-i18n="dir_continue" disabled>Kontynuuj</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: MINECRAFT LOGIN               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-login" style="display:none">
+    <div class="login-bg">
+      <div class="login-blob login-blob-1"></div>
+      <div class="login-blob login-blob-2"></div>
+      <div class="login-blob login-blob-3"></div>
+      <div class="login-blob login-blob-4"></div>
+      <div class="login-blob login-blob-5"></div>
+    </div>
+    <div class="login-card">
+      <h2 class="login-title" data-i18n="login_title">Account Manager</h2>
+      <p class="login-subtitle" id="login-subtitle" data-i18n="login_subtitle">X3LANIX | 0 kont</p>
+
+      <div class="login-accounts-area">
+        <p class="login-no-accounts" id="login-no-accounts" data-i18n="login_no_accounts">Brak kont.</p>
+        <div class="login-account-item" id="login-account-item" style="display:none">
+          <div class="login-account-avatar" id="login-account-avatar"></div>
+          <span class="login-account-name" id="login-account-name"></span>
+        </div>
+      </div>
+
+      <div class="login-input-row">
+        <input type="text" class="login-input" id="login-username" placeholder="Username..." data-i18n-placeholder="login_username" maxlength="16">
+        <button class="btn btn-small" id="btn-random" data-i18n="login_random">Random</button>
+      </div>
+
+      <div class="login-buttons">
+        <button class="btn btn-auth" id="btn-microsoft" data-i18n="login_microsoft">Microsoft</button>
+        <button class="btn btn-auth" id="btn-offline" data-i18n="login_offline">Token</button>
+      </div>
+
+      <button class="btn btn-primary login-continue" id="btn-login-continue" data-i18n="login_continue" disabled>Kontynuuj</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: DOWNLOADING                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-downloading" style="display:none">
+    <div class="dl-container">
+      <div class="dl-logo">
+        <svg class="logo-svg logo-spin" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="30" stroke="white" stroke-width="4.5" stroke-dasharray="140 50"/>
+          <circle cx="55" cy="28" r="7" fill="white"/>
+          <path d="M25 40 Q40 15 55 40 Q40 30 25 40Z" fill="white" opacity="0.9"/>
+        </svg>
+      </div>
+      <h2 class="dl-title" data-i18n="dl_title">x3lanix client</h2>
+      <p class="dl-status" id="dl-status" data-i18n="dl_checking">Sprawdzanie plików klienta...</p>
+
+      <div class="dl-progress-container">
+        <div class="dl-progress-info">
+          <span class="dl-progress-text" id="dl-progress-text">0MB / 0MB</span>
+          <span class="dl-progress-percent" id="dl-progress-percent">0%</span>
+        </div>
+        <div class="dl-progress-bar">
+          <div class="dl-progress-fill" id="dl-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-cancel" id="btn-dl-cancel" data-i18n="dl_cancel">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 5L9 9M9 5L5 9" stroke="currentColor" stroke-width="1.5"/></svg>
+        Anuluj
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  SCREEN: MAIN MENU                     -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="screen" id="screen-main" style="display:none">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-top">
+        <!-- X3LANIX Moon Logo button -->
+        <button class="sidebar-logo" id="sidebar-logo" title="X3LANIX">
+          <svg class="logo-svg-small" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="30" stroke="white" stroke-width="4.5" stroke-dasharray="140 50"/>
+            <circle cx="55" cy="28" r="7" fill="white"/>
+            <path d="M25 40 Q40 15 55 40 Q40 30 25 40Z" fill="white" opacity="0.9"/>
+          </svg>
+        </button>
+
+        <!-- Play -->
+        <button class="sidebar-btn active" id="nav-play" title="Play" data-tab="tab-play">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M6 4L16 10L6 16V4Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        <!-- Settings -->
+        <button class="sidebar-btn" id="nav-settings" title="Settings" data-tab="tab-settings">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 13a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M17.4 12.3l-1.1-.6c.1-.5.2-1.1.2-1.7s-.1-1.2-.2-1.7l1.1-.6c.3-.2.4-.6.2-.9l-1-1.7c-.2-.3-.5-.4-.9-.2l-1.1.6c-.4-.4-.9-.7-1.4-.9V3.5c0-.3-.3-.6-.6-.6h-2c-.3 0-.6.3-.6.6v1.1c-.5.2-1 .5-1.4.9L7.5 5c-.3-.2-.7-.1-.9.2l-1 1.7c-.2.3-.1.7.2.9l1.1.6c-.1.5-.2 1.1-.2 1.7s.1 1.2.2 1.7l-1.1.6c-.3.2-.4.6-.2.9l1 1.7c.2.3.5.4.9.2l1.1-.6c.4.4.9.7 1.4.9v1.1c0 .3.3.6.6.6h2c.3 0 .6-.3.6-.6v-1.1c.5-.2 1-.5 1.4-.9l1.1.6c.3.2.7.1.9-.2l1-1.7c.2-.3.1-.7-.2-.9z" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </button>
+
+        <!-- Account -->
+        <button class="sidebar-btn" id="nav-account" title="Account" data-tab="tab-account">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </button>
+
+        <!-- Mods -->
+        <button class="sidebar-btn" id="nav-mods" title="Mods" data-tab="tab-mods">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </button>
+
+        <!-- Console -->
+        <button class="sidebar-btn" id="nav-console" title="Console" data-tab="tab-console">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 8l3 3-3 3M11 14h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button class="sidebar-btn quit-btn" id="nav-quit" title="Quit">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7 4H4v12h3M10 10h7m0 0l-3-3m3 3l-3 3" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Tab Content Area -->
+    <div class="tab-content">
+
+      <!-- ══ PLAY TAB ══ -->
+      <div class="tab active" id="tab-play">
+        <div class="play-container">
+          <div class="play-skin-area">
+            <div class="play-skin-bg"></div>
+            <!-- 3D skin canvas container — skinview3d appends its canvas here -->
+            <div id="skin-canvas" class="skin-canvas-3d"></div>
+          </div>
+          <div class="play-info">
+            <p class="play-client-label" data-i18n="play_client">x3lanix client</p>
+            <h1 class="play-ready" data-i18n="play_ready">Gotowy do uruchomienia</h1>
+            <p class="play-desc" data-i18n="play_desc">X3LANIX - Client</p>
+
+            <!-- News cards area (from x3lanix lancher) -->
+            <div class="news-area" id="news-area">
+              <div class="news-cards" id="news-cards"></div>
+            </div>
+
+            <div class="play-meta-row">
+              <div class="play-meta-card">
+                <span class="play-meta-label" data-i18n="play_subscription">SUBSKRYPCJA</span>
+                <span class="play-meta-value" data-i18n="play_subscription_value">Lifetime</span>
+              </div>
+              <div class="play-meta-card">
+                <span class="play-meta-label" data-i18n="play_nickname">NICK W GRZE</span>
+                <span class="play-meta-value" id="play-nickname">Player</span>
+              </div>
+              <!-- MC Version card (from x3lanix lancher version select) -->
+              <div class="play-meta-card play-version-card" id="btn-version-select" title="Change MC Version">
+                <span class="play-meta-label" data-i18n="play_mc_version">WERSJA MC</span>
+                <span class="play-meta-value" id="play-mc-version">1.21.1</span>
+              </div>
+            </div>
+
+            <button class="btn btn-launch" id="btn-launch" data-i18n="play_launch">Uruchom grę</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SETTINGS TAB ══ -->
+      <div class="tab" id="tab-settings">
+        <div class="settings-scroll-area">
+          <div class="settings-container">
+            <!-- Language Selector -->
+            <div class="settings-lang-row">
+              <button class="lang-btn active" data-lang="PL">PL</button>
+              <button class="lang-btn" data-lang="EN">EN</button>
+              <button class="lang-btn" data-lang="RU">RU</button>
+            </div>
+            
+            <hr class="separator">
+
+            <!-- Nickname -->
+            <label class="settings-label" data-i18n="settings_nickname">NICK W GRZE</label>
+            <input type="text" class="settings-input" id="settings-username" value="Player" maxlength="16">
+
+            <!-- RAM Slider -->
+            <label class="settings-label" id="ram-label"><span data-i18n="settings_ram">PRZYDZIAŁ RAM</span>: <span id="ram-value">4028</span> <span data-i18n="settings_ram_unit">MB</span></label>
+            <input type="range" class="settings-slider" id="settings-ram" min="1024" max="16384" step="128" value="4028">
+
+            <!-- Window Size -->
+            <label class="settings-label" data-i18n="settings_window_size">ROZMIAR OKNA GRY</label>
+            <div class="settings-size-row">
+              <input type="number" class="settings-input size-input" id="settings-width" value="1280" min="800" max="3840">
+              <span class="settings-size-x">×</span>
+              <input type="number" class="settings-input size-input" id="settings-height" value="720" min="600" max="2160">
+            </div>
+
+            <!-- Game Location -->
+            <label class="settings-label" data-i18n="settings_game_location">LOKALIZACJA GRY</label>
+            <div class="settings-path-row">
+              <input type="text" class="settings-input path-input" id="settings-game-dir" readonly>
+              <button class="btn btn-icon" id="btn-change-dir" title="Change directory">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4h5l2 2h5v7H2V4z" stroke="currentColor" stroke-width="1.5"/></svg>
+              </button>
+            </div>
+
+            <!-- Toggles -->
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3h12v12H3z" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6v6H6z" fill="currentColor" opacity="0.3"/></svg>
+              </div>
+              <span class="settings-toggle-text" data-i18n="settings_fullscreen">Uruchom w pełnym ekranie</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-fullscreen">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v14M5 6l4-4 4 4M5 12l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <span class="settings-toggle-text" data-i18n="settings_reinstall">Przeinstaluj klienta</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-reinstall">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l3 2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <span class="settings-toggle-text" data-i18n="settings_zgc">ZGC Generational (4-8 GB)</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-zgc">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <hr class="separator">
+
+            <!-- ══ NEW SETTINGS (from x3lanix lancher) ══ -->
+
+            <!-- DarkClient forces 1.21.1 automatically -->
+
+            <!-- Java Distribution -->
+            <label class="settings-label" data-i18n="settings_java_distro">DYSTRYBUCJA JAVA</label>
+            <select class="settings-input settings-select" id="settings-java-distro">
+              <option value="automatic">Automatyczna</option>
+              <option value="temurin">Eclipse Temurin</option>
+              <option value="graalvm">GraalVM CE</option>
+              <option value="zulu">Azul Zulu</option>
+              <option value="custom">Własna ścieżka</option>
+            </select>
+
+            <!-- Custom Java Path (hidden by default) -->
+            <div id="custom-java-container" style="display:none">
+              <label class="settings-label" data-i18n="settings_custom_java">ŚCIEŻKA DO JAVY</label>
+              <div class="settings-path-row">
+                <input type="text" class="settings-input path-input" id="settings-custom-java" readonly placeholder="Wybierz plik javaw.exe...">
+                <button class="btn btn-icon" id="btn-select-java" title="Select Java">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4h5l2 2h5v7H2V4z" stroke="currentColor" stroke-width="1.5"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Concurrent Downloads -->
+            <label class="settings-label" id="concurrent-label"><span data-i18n="settings_concurrent">POBIERANIE RÓWNOLEGŁE</span>: <span id="concurrent-value">5</span> <span data-i18n="settings_concurrent_unit">połączeń</span></label>
+            <input type="range" class="settings-slider" id="settings-concurrent" min="1" max="50" step="1" value="5">
+
+            <!-- Keep Launcher Running -->
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="2" fill="currentColor"/></svg>
+              </div>
+              <span class="settings-toggle-text" data-i18n="settings_keep_open">Nie zamykaj launchera po uruchomieniu</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="settings-keep-open" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ACCOUNT TAB ══ -->
+      <div class="tab" id="tab-account">
+        <div class="account-container">
+          <h2 class="tab-title" data-i18n="account_title">Konto</h2>
+          <div class="account-skin-box">
+            <div class="account-card-skin">
+              <!-- 3D skin canvas container for account tab -->
+              <div id="account-skin-canvas" class="skin-canvas-3d" style="width:100%;height:100%;"></div>
+            </div>
+          </div>
+          <div class="account-info">
+            <div class="account-info-row">
+              <span class="account-info-label" data-i18n="account_username">Nazwa użytkownika</span>
+              <span class="account-info-value" id="account-username">Player</span>
+            </div>
+            <div class="account-info-row">
+              <span class="account-info-label" data-i18n="account_uuid">UUID</span>
+              <span class="account-info-value account-uuid" id="account-uuid">—</span>
+            </div>
+            <div class="account-info-row">
+              <span class="account-info-label" data-i18n="account_type">Typ logowania</span>
+              <span class="account-info-value" id="account-type">Offline</span>
+            </div>
+            <button class="btn btn-outline btn-danger" id="btn-logout" data-i18n="account_logout">Wyloguj się</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODS TAB ══ -->
+      <div class="tab" id="tab-mods">
+        <div class="mods-container">
+          <div class="console-header" style="margin-bottom: 20px;">
+            <h2 class="tab-title" style="margin: 0; color: #ff3333;">DarkClient Modules</h2>
+            <button class="btn btn-small" id="btn-add-mod" style="background: #ff3333; color: #000000; font-weight: 600;">Zapisz Konfig</button>
+          </div>
+          <div class="darkclient-modules-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; overflow-y: auto; max-height: 400px; padding-right: 10px;">
+            
+            <!-- COMBAT -->
+            <div class="module-category" style="background: rgba(255,51,51,0.05); border: 1px solid rgba(255,51,51,0.2); border-radius: 8px; padding: 15px;">
+              <h3 style="color: #ff3333; font-size: 14px; margin-bottom: 12px; margin-top: 0;">⚔ Combat</h3>
+              
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>Auto Trap</span>
+                <input type="checkbox" checked style="accent-color: #ff3333;">
+              </label>
+
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>KillAura</span>
+                <input type="checkbox" checked style="accent-color: #ff3333;">
+              </label>
+
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>CrystalAura</span>
+                <input type="checkbox" style="accent-color: #ff3333;">
+              </label>
+            </div>
+
+            <!-- MOVEMENT -->
+            <div class="module-category" style="background: rgba(255,51,51,0.05); border: 1px solid rgba(255,51,51,0.2); border-radius: 8px; padding: 15px;">
+              <h3 style="color: #ff3333; font-size: 14px; margin-bottom: 12px; margin-top: 0;">🚀 Movement</h3>
+              
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>Fly</span>
+                <input type="checkbox" style="accent-color: #ff3333;">
+              </label>
+
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>Speed</span>
+                <input type="checkbox" checked style="accent-color: #ff3333;">
+              </label>
+            </div>
+
+            <!-- RENDER -->
+            <div class="module-category" style="background: rgba(255,51,51,0.05); border: 1px solid rgba(255,51,51,0.2); border-radius: 8px; padding: 15px;">
+              <h3 style="color: #ff3333; font-size: 14px; margin-bottom: 12px; margin-top: 0;">👁 Render</h3>
+              
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>ESP / Wallhack</span>
+                <input type="checkbox" checked style="accent-color: #ff3333;">
+              </label>
+
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #ccc; font-size: 13px; cursor: pointer;">
+                <span>FullBright</span>
+                <input type="checkbox" checked style="accent-color: #ff3333;">
+              </label>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CONSOLE TAB ══ -->
+      <div class="tab" id="tab-console">
+        <div class="console-container">
+          <div class="console-header">
+            <h2 class="tab-title" data-i18n="console_title">Konsola</h2>
+            <button class="btn btn-small" id="btn-clear-console" data-i18n="console_clear">Wyczyść</button>
+          </div>
+          <div class="console-output-wrap" id="console-output-wrap">
+            <pre class="console-output" id="console-output" data-i18n="console_waiting">Oczekiwanie na odpalanie gry...</pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  MODAL: VERSION SELECT (from LL)      -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-version-select" style="display:none">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="version_select_title">Wybierz wersję</h3>
+        <button class="btn btn-icon modal-close" id="btn-version-close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="version-list" id="version-list">
+          <p style="color: var(--text-muted); font-size: 12px;">Ładowanie wersji...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!--  MODAL: FIRST RUN WARNING (from LL)   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-first-run" style="display:none">
+    <div class="modal-panel" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">👋 x3lanix client</h3>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.8; margin-bottom: 16px;" data-i18n="first_run_message">
+          Witaj w x3lanix — premium Minecraft launcher z Fabric mods.
+          Launcher automatycznie zainstaluje Minecraft, Fabric Loader i wybrane mody.
+          Upewnij się, że masz połączenie z internetem.
+        </p>
+        <div class="first-run-features">
+          <div class="first-run-feature"><span>⚡</span> Sodium + Lithium + Iris</div>
+          <div class="first-run-feature"><span>🧵</span> Fabric 1.21.1</div>
+          <div class="first-run-feature"><span>🎨</span> Custom Resource Pack</div>
+          <div class="first-run-feature"><span>☕</span> Auto Java Detection</div>
+        </div>
+        <button class="btn btn-primary" id="btn-first-run-dismiss" style="width:100%; margin-top: 20px;" data-i18n="first_run_continue">Zrozumiałem, kontynuuj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: order matters! -->
+  <script src="js/skinview3d.bundle.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/skinviewer.js"></script>
+  <script src="js/renderer.js"></script>
+</body>
+</html>

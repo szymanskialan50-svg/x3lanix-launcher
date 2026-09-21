@@ -1,0 +1,17 @@
+{
+    "identifier": "download-capability",
+    "description": "Capability for the download view",
+    "remote": {
+        "urls": [
+            "https://liquidbounce.net",
+            "https://*.liquidbounce.net",
+            "https://ccbluex.net",
+            "https://*.ccbluex.net"
+        ]
+    },
+    "windows": ["download_view-*"],
+    "local": false,
+    "permissions": [
+        "core:event:default"
+    ]
+}

@@ -1,0 +1,373 @@
+<!-- lib/main/MainScreen.svelte -->
+<script>
+    import {invoke} from "@tauri-apps/api/core";
+    import {listen} from "@tauri-apps/api/event";
+    import {confirm} from "@tauri-apps/plugin-dialog";
+    import VerticalFlexWrapper from "../common/VerticalFlexWrapper.svelte";
+    import MainHeader from "./MainHeader.svelte";
+    import ContentWrapper from "./ContentWrapper.svelte";
+    import LaunchArea from "./LaunchArea.svelte";
+    import NewsArea from "./news/NewsArea.svelte";
+    import VersionWarning from "./VersionWarning.svelte";
+    import ClientLog from "./log/ClientLog.svelte";
+    import Settings from "./settings/Settings.svelte";
+    import VersionSelect from "./VersionSelect.svelte";
+    import FirstRunWarning from "./FirstRunWarning.svelte";
+    import {onMount} from "svelte";
+
+    export let client;
+    export let options;
+    export let error;
+
+    let running = false;
+
+    let logShown = false;
+    let settingsShown = false;
+    let versionSelectShown = false;
+    let launchVersionWarningShown = false;
+    let firstRunWarningShown = false;
+    let launchVersionWarningCountdown = 0;
+    let log = [];
+
+    let versionState = {
+        builds: [],
+        currentBuild: null,
+        recommendedMods: [],
+        customMods: []
+    };
+
+    let progressState = {
+        max: 0,
+        value: 0,
+        text: "",
+        speed: 0
+    };
+
+    $: if (launchVersionWarningShown && launchVersionWarningCountdown > 0) {
+        const countdown = setInterval(() => {
+            launchVersionWarningCountdown--;
+            if (launchVersionWarningCountdown <= 0) clearInterval(countdown);
+        }, 1000);
+    }
+
+    function updateModStates() {
+        const branchName = "nextgen"; // todo: remove this later
+        if (!options.version.options[branchName]) {
+            options.version.options[branchName] = {
+                modStates: {},
+                customModStates: {}
+            };
+        }
+
+        const branchOptions = options.version.options[branchName];
+        versionState.recommendedMods.forEach(mod => {
+            branchOptions.modStates[mod.name] = mod.enabled;
+        });
+        versionState.customMods.forEach(mod => {
+            branchOptions.customModStates[mod.name] = mod.enabled;
+        });
+        options.store();
+    }
+
+    async function updateData() {
+        let newBuilds;
+        try {
+            newBuilds = await invoke("request_builds", {
+                client,
+                release: !options.launcher.showNightlyBuilds
+            });
+        } catch (e) {
+            console.error("Failed to request builds:", e);
+            error = {
+                message: "Failed to establish connection with LiquidBounce API",
+                error: e
+            };
+            return;
+        }
+
+        newBuilds.forEach(build => {
+            const date = new Date(build.date);
+            build.date = date.toLocaleString();
+            build.dateDay = date.toLocaleDateString();
+        });
+
+        versionState.builds = newBuilds;
+        const buildId = options.version.buildId;
+
+        if (buildId !== -1 && !versionState.builds.find(build => build.buildId === buildId)) {
+            options.version.buildId = -1;
+            await options.store();
+        }
+
+        const activeBuild = buildId === -1 ? versionState.builds[0] :
+            versionState.builds.find(build => build.buildId === buildId);
+        if (!activeBuild) return;
+
+        const changelog = await invoke("fetch_changelog", {
+            client,
+            buildId: activeBuild.buildId
+        });
+
+        versionState.currentBuild = { ...activeBuild, changelog: changelog.changelog };
+        await updateMods();
+    }
+
+    async function updateMods() {
+        if (!versionState.currentBuild) return;
+
+        const [newRecommendedMods, newCustomMods] = await Promise.all([
+            invoke("request_mods", {
+                client,
+                mcVersion: versionState.currentBuild.mcVersion,
+                subsystem: versionState.currentBuild.subsystem
+            }),
+            invoke("get_custom_mods", {
+                branch: versionState.currentBuild.branch,
+                mcVersion: versionState.currentBuild.mcVersion
+            })
+        ]);
+
+        const branchOptions = options.version.options[versionState.currentBuild.branch];
+
+        if (branchOptions) {
+            newRecommendedMods.forEach(mod => {
+                mod.enabled = branchOptions.modStates[mod.name] ?? mod.enabled;
+            });
+            newCustomMods.forEach(mod => {
+                mod.enabled = branchOptions.customModStates[mod.name] ?? mod.enabled;
+            });
+        }
+
+        versionState.recommendedMods = newRecommendedMods;
+        versionState.customMods = newCustomMods;
+    }
+
+    async function runClientWithWarning() {
+        if (!versionState.currentBuild) return;
+        const isWarning = options.version.buildId !== -1;
+
+        if (isWarning) {
+            launchVersionWarningShown = true;
+            launchVersionWarningCountdown = 3;
+        } else {
+            await runClient();
+        }
+    }
+
+    const WARNING_MEMORY = 4096;
+
+    async function runClient() {
+        if (options.launcher.firstRun) {
+            firstRunWarningShown = true;
+            return;
+        }
+
+        if (running) return;
+
+        log = [];
+
+        try {
+            running = true;
+            progressState = { max: 0, value: 0, text: "Starting client...", speed: 0 };
+
+            await authenticate();
+            await checkMemory();
+            await launchClient();
+        } catch (error) {
+            console.error("Failed to start client:", error);
+            log = [...log, `Failed to start client: ${error}`];
+            running = false;
+            logShown = true;
+        }
+    }
+
+    async function authenticate() {
+        if (options.premium.account) {
+            try {
+                progressState.text = "Authenticating client account...";
+                options.premium.account = await invoke("client_account_update", {
+                    client,
+                    account: options.premium.account
+                });
+            } catch (e) {
+                console.error("Failed to authenticate client account:", e);
+                log = [...log, `Failed to authenticate client account: ${e}`];
+                options.premium.account = null;
+            }
+        }
+
+        progressState.text = "Refreshing minecraft session...";
+        try {
+            options.start.account = await invoke("refresh", {
+                client,
+                accountData: options.start.account
+            });
+        } catch (e) {
+            options.start.account = null;
+            throw e;
+        }
+    }
+
+    async function checkMemory() {
+        if (options.start.memory < WARNING_MEMORY) {
+            const confirmed = await confirm(
+                `You are about to launch the client with less than ${WARNING_MEMORY} MB of memory. This may cause performance issues. Do you want to continue?`
+            );
+
+            if (!confirmed) {
+                running = false;
+                throw new Error("Memory warning declined");
+            }
+        }
+    }
+
+    async function launchClient() {
+        await options.store();
+        await invoke("run_client", {
+            client,
+            buildId: versionState.currentBuild.buildId,
+            options,
+            mods: [...versionState.recommendedMods, ...versionState.customMods]
+        });
+    }
+
+    async function terminateClient() {
+        await invoke("terminate");
+    }
+
+    async function continueAfterFirstRun() {
+        await hideFirstRunWarning();
+        await runClient();
+    }
+
+    async function hideFirstRunWarning() {
+        firstRunWarningShown = false;
+        if (options.launcher.firstRun) {
+            options.launcher.firstRun = false;
+            await options.store();
+        }
+    }
+    
+    async function switchToNextgen() {
+        launchVersionWarningShown = false;
+        options.version.buildId = -1;
+        await options.store();
+        await updateData();
+        await runClient();
+    }
+
+    listen("process-output", (event) => {
+        log = [...log, event.payload];
+    });
+
+    listen("progress-update", (event) => {
+        const { type, value } = event.payload;
+        switch (type) {
+            case "max":
+                progressState.max = value;
+                break;
+            case "progress":
+                progressState.value = value;
+                break;
+            case "label":
+                progressState.text = value;
+                break;
+            case "speed":
+                progressState.speed = value;
+                break;
+        }
+    });
+
+    listen("client-exited", () => {
+        running = false;
+    });
+
+    listen("client-error", () => {
+        logShown = true;
+    });
+
+    onMount(async () => {
+        await updateData();
+    });
+</script>
+
+{#if firstRunWarningShown}
+    <FirstRunWarning
+            on:hide={hideFirstRunWarning}
+            on:continue={continueAfterFirstRun}
+    />
+{/if}
+
+{#if launchVersionWarningShown}
+    <VersionWarning
+            {launchVersionWarningCountdown}
+            on:switchToNextgen={switchToNextgen}
+            on:runClientAnyway={async () => {
+                launchVersionWarningShown = false;
+                await runClient();
+            }}
+            on:hide={() => launchVersionWarningShown = false}
+    />
+{/if}
+
+{#if logShown}
+    <ClientLog messages={log} on:hideClientLog={() => logShown = false} />
+{/if}
+
+{#if settingsShown}
+    <Settings
+            {client}
+            bind:options
+            on:hide={async () => {
+                settingsShown = false;
+                await options.store();
+            }}
+    />
+{/if}
+
+{#if versionSelectShown}
+    <VersionSelect
+            bind:options
+            {versionState}
+            on:updateData={updateData}
+            on:updateModStates={updateModStates}
+            on:updateMods={updateMods}
+            on:hide={async () => {
+            versionSelectShown = false;
+            await options.store();
+        }}
+    />
+{/if}
+
+<VerticalFlexWrapper
+        blur={settingsShown || versionSelectShown || logShown || launchVersionWarningShown || firstRunWarningShown}
+>
+    <MainHeader
+            account={options.start.account}
+            {running}
+            {progressState}
+            on:showSettings={() => settingsShown = true}
+    />
+
+    <ContentWrapper>
+        <LaunchArea
+                versionInfo={{
+                    bannerUrl: "img/banner.png",
+                    title: versionState.currentBuild ?
+                        `LiquidBounce v${versionState.currentBuild.lbVersion}` :
+                        "Loading...",
+                    date: versionState.currentBuild?.dateDay || "Loading...",
+                    description: versionState.currentBuild?.changelog || "Loading..."
+                }}
+                mcVersion={versionState.currentBuild?.mcVersion || "Loading..."}
+                lbVersion={versionState.currentBuild?.lbVersion || "Loading..."}
+                canLaunch={!!versionState.currentBuild}
+                {running}
+                on:showVersionSelect={() => versionSelectShown = true}
+                on:showClientLog={() => logShown = true}
+                on:launch={runClientWithWarning}
+                on:terminate={terminateClient}
+        />
+        <NewsArea {client} />
+    </ContentWrapper>
+</VerticalFlexWrapper>
