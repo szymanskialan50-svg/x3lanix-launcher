@@ -1,50 +1,29 @@
 {
   "name": "x3lanix-launcher",
-  "version": "1.0.0",
-  "description": "x3lanix client — Premium Custom Minecraft Launcher",
-  "main": "main.js",
+  "private": true,
+  "version": "0.6.1",
+  "type": "module",
+  "license": "GPL-3.0",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder --win portable",
-    "build:dir": "electron-builder --win dir"
-  },
-  "author": "X3LANIX",
-  "license": "MIT",
-  "dependencies": {
-    "adm-zip": "^0.6.0",
-    "axios": "^1.7.9",
-    "electron-store": "8.1.0",
-    "minecraft-launcher-core": "^3.18.1",
-    "msmc": "^5.0.5",
-    "sharp": "^0.35.4",
-    "skinview3d": "^3.4.2",
-    "three": "^0.185.1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
   },
   "devDependencies": {
-    "electron": "^33.2.0",
-    "electron-builder": "^25.1.8",
-    "png-to-ico": "^2.1.8"
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@tauri-apps/cli": "^2.11.4",
+    "svelte": "^4.2.20",
+    "svelte-loading-spinners": "^0.3.6",
+    "vite": "^5.4.21"
   },
-  "build": {
-    "appId": "com.x3lanix.launcher",
-    "productName": "x3lanix client",
-    "win": {
-      "target": "portable",
-      "icon": "assets/icon.ico"
-    },
-    "portable": {
-      "artifactName": "x3lanix client.exe"
-    },
-    "files": [
-      "main.js",
-      "preload.js",
-      "src/**/*",
-      "backend/**/*",
-      "assets/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "output": "dist2"
-    }
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
+    "@tauri-apps/plugin-dialog": "^2.7.2",
+    "@tauri-apps/plugin-opener": "^2.5.4",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "nouislider": "^15.8.1",
+    "qrcode-generator": "^2.0.4"
   }
 }

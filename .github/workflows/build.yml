@@ -1,4 +1,4 @@
-name: Build x3lanix launcher
+name: Build x3lanix launcher (LiquidBounce Edition)
 
 on:
   push:
@@ -19,18 +19,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Build Portable Executable
-        run: npm run build
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Build Tauri App
+        uses: tauri-apps/tauri-action@v0
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: x3lanix-client-portable
-          path: dist2/*.exe
+          tagName: v__VERSION__
+          releaseName: 'x3lanix launcher v__VERSION__'
+          releaseBody: 'Automated release for x3lanix launcher (LiquidBounce Edition)'
+          releaseDraft: true
+          prerelease: false

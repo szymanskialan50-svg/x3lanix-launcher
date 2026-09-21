@@ -1,5 +1,7 @@
-node_modules/
-dist/
-dist2/
-*.log
+/node_modules/
+/public/build/
+/dist
+/tauri
+
 .DS_Store
+.env
