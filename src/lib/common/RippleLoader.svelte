@@ -16,7 +16,7 @@
  */
 
     .lds-ripple {
-        color: #ffffff;
+        color: #4677FF;
         margin: 0 auto;
     }
 

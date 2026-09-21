@@ -1,20 +1,20 @@
 /*
- * This file is part of x3lanix-launcher (https://github.com/CCBlueX/x3lanix-launcher)
+ * This file is part of LiquidLauncher (https://github.com/CCBlueX/LiquidLauncher)
  *
  * Copyright (c) 2015 - 2024 CCBlueX
  *
- * x3lanix-launcher is free software: you can redistribute it and/or modify
+ * LiquidLauncher is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * x3lanix-launcher is distributed in the hope that it will be useful,
+ * LiquidLauncher is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with x3lanix-launcher. If not, see <https://www.gnu.org/licenses/>.
+ * along with LiquidLauncher. If not, see <https://www.gnu.org/licenses/>.
  */
 
 use crate::minecraft::{
@@ -54,7 +54,7 @@ pub async fn open_download_page(
         if count > MAX_DOWNLOAD_ATTEMPTS {
             bail!("Failed to open download page after {} attempts.\n\n\
             Please do not close the download window. Instead proceed with the download by pressing on 'Continue' and then 'Download'.\n\n\
-            If the download window does not appear, please try restarting x3lanix-launcher with administrator privileges.\n\
+            If the download window does not appear, please try restarting LiquidLauncher with administrator privileges.\n\
             If this does not help, please install LiquidBounce manually (https://liquidbounce.net/docs/get-started/manual-installation).\n\
             Or try our advice at https://liquidbounce.net/docs/tutorials/fixing-liquidlauncher.", MAX_DOWNLOAD_ATTEMPTS);
         }

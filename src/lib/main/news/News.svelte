@@ -16,7 +16,7 @@
 <div class="news">
     <div class="banner">
         <div class="banner-text">{bannerText}</div>
-        <div class="background" style="background-image: linear-gradient(to bottom, transparent, #ffffffc5), url({bannerImageUrl});"></div>
+        <div class="background" style="background-image: linear-gradient(to bottom, transparent, #4677ffc5), url({bannerImageUrl});"></div>
     </div>
     <div class="content">
         <div class="title-date">
@@ -98,7 +98,7 @@
 
     .content .button-show-news {
         border: none;
-        background-color: #ffffff;
+        background-color: #4677FF;
         color: white;
         font-size: 12px;
         border-radius: 4px;

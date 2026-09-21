@@ -65,7 +65,7 @@
 
     .checkbox:checked + .slider::before {
         transform: translateX(10px);
-        background-color: #ffffff;
+        background-color: #4677ff;
     }
 
     .checkbox:disabled + .slider {

@@ -19,7 +19,7 @@
     <ButtonSetting
             text="Switch to Nextgen now"
             on:click={() => dispatch('switchToNextgen')}
-            color="#ffffff"
+            color="#4677FF"
     />
     <ButtonSetting
             disabled={launchVersionWarningCountdown > 0}

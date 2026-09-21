@@ -27,7 +27,7 @@
     <div class="warning-container">
         <h1>Security Warning</h1>
         <p class="warning-message">
-            x3lanix-launcher is unable to connect to the secure (HTTPS) API endpoint, 
+            LiquidLauncher is unable to connect to the secure (HTTPS) API endpoint, 
             but was able to establish a connection to a non-secure (HTTP) endpoint.
         </p>
         
@@ -47,7 +47,7 @@
         </div>
 
         <div class="action-buttons">
-            <ButtonSetting text="Get Cloudflare WARP" color="#ffffff" on:click={() => openUrl('https://1.1.1.1/')}></ButtonSetting>
+            <ButtonSetting text="Get Cloudflare WARP" color="#4677ff" on:click={() => openUrl('https://1.1.1.1/')}></ButtonSetting>
             <ButtonSetting text="Allow Non-Secure Connection" color="#B83529" on:click={handleAllowConnection}></ButtonSetting>
             <ButtonSetting text="Cancel" color="#707070" on:click={handleCancel}></ButtonSetting>
         </div>

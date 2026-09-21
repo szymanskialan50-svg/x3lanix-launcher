@@ -22,7 +22,7 @@
     </TitleBar>
 
     <div class="loading-circle">
-        <Jumper size="100" color="#ffffff" unit="px" duration="1s" />
+        <Jumper size="100" color="#4677ff" unit="px" duration="1s" />
     </div>
 </VerticalFlexWrapper>
 

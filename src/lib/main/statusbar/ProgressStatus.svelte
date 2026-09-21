@@ -45,7 +45,7 @@
     }
 
     .progress::-webkit-progress-value {
-        background-color: #ffffff;
+        background-color: #4677ff;
     }
 
     .labels {

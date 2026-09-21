@@ -1,20 +1,20 @@
 /*
- * This file is part of x3lanix-launcher (https://github.com/CCBlueX/x3lanix-launcher)
+ * This file is part of LiquidLauncher (https://github.com/CCBlueX/LiquidLauncher)
  *
  * Copyright (c) 2015 - 2024 CCBlueX
  *
- * x3lanix-launcher is free software: you can redistribute it and/or modify
+ * LiquidLauncher is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * x3lanix-launcher is distributed in the hope that it will be useful,
+ * LiquidLauncher is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with x3lanix-launcher. If not, see <https://www.gnu.org/licenses/>.
+ * along with LiquidLauncher. If not, see <https://www.gnu.org/licenses/>.
  */
 #![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
@@ -43,7 +43,7 @@ mod utils;
 const LAUNCHER_VERSION: &str = env!("CARGO_PKG_VERSION");
 static LAUNCHER_DIRECTORY: Lazy<ProjectDirs> =
     Lazy::new(
-        || match ProjectDirs::from("net", "CCBlueX", "x3lanix-launcher") {
+        || match ProjectDirs::from("net", "CCBlueX", "LiquidLauncher") {
             Some(proj_dirs) => proj_dirs,
             None => panic!("no application directory"),
         },
@@ -93,7 +93,7 @@ pub fn main() -> Result<()> {
         let span = debug_span!("startup");
         let _guard = span.enter();
 
-        info!(parent: &span, "Starting x3lanix-launcher v{}", LAUNCHER_VERSION);
+        info!(parent: &span, "Starting LiquidLauncher v{}", LAUNCHER_VERSION);
         info!(parent: &span, "OS: {:} {:} {:}", OS, *ARCHITECTURE, OS_VERSION.to_string());
 
         // application directory

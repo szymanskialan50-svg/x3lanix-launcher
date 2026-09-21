@@ -203,7 +203,7 @@
         left: 50%;
         bottom: -20px;
         transform: translateX(-50%);
-        background-color: #ffffff;
+        background-color: #4677FF;
         border-radius: 5px;
     }
 
@@ -240,7 +240,7 @@
         border: none;
         padding: 0;
         margin: 0;
-        color: #ffffff;
+        color: #4677FF;
         font-weight: 600;
         font-size: inherit;
         font-family: inherit;
@@ -275,7 +275,7 @@
         padding: 0 14px;
         border: none;
         border-radius: 6px;
-        background: #ffffff;
+        background: #4677FF;
         color: white;
         font-family: "Inter", sans-serif;
         font-size: 12px;
@@ -340,7 +340,7 @@
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: #ffffff;
+        background: #4677FF;
         animation: pulse 1.4s ease-in-out infinite;
     }
 

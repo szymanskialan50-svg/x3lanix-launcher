@@ -1,16 +1,15 @@
-name: Build x3lanix launcher (LiquidBounce Edition)
+name: Build Official LiquidLauncher EXE
 
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-tauri:
+    permissions:
+      contents: write
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,10 +19,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Rust
+      - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Node Dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Build Tauri App
@@ -31,8 +30,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v__VERSION__
-          releaseName: 'x3lanix launcher v__VERSION__'
-          releaseBody: 'Automated release for x3lanix launcher (LiquidBounce Edition)'
-          releaseDraft: true
+          tagName: v0.6.1-${{ github.sha }}
+          releaseName: 'LiquidLauncher Build'
+          releaseBody: 'Official LiquidLauncher Windows Build'
+          releaseDraft: false
           prerelease: false

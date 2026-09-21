@@ -25,6 +25,6 @@
     <ButtonSetting
             text="Continue"
             on:click={() => dispatch('continue')}
-            color="#ffffff"
+            color="#4677FF"
     />
 </SettingsContainer>

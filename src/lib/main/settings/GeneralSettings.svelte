@@ -124,7 +124,7 @@
 <ButtonSetting
     text="Sign out of Minecraft Account"
     on:click={logout}
-    color="#ffffff"
+    color="#4677FF"
 />
 
 <ButtonSetting text="Clear Data" on:click={clearData} color="#B83529" />

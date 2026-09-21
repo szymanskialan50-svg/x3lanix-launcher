@@ -26,7 +26,7 @@
     }
 
     .button.primary {
-        background-color: #ffffff;
+        background-color: #4677FF;
     }
 
     .button.primary:hover {

@@ -35,7 +35,7 @@
         align-items: center;
         column-gap: 10px;
         overflow: hidden;
-        background: linear-gradient(to left, rgba(0, 0, 0, .36) 50%, #ffffff 50%);
+        background: linear-gradient(to left, rgba(0, 0, 0, .36) 50%, #4677ff 50%);
         background-size: 200% 100%;
         background-position: right bottom;
         will-change: background-position;
@@ -64,7 +64,7 @@
     .icon {
         height: 25px;
         width: 25px;
-        background-color: #ffffff;
+        background-color: #4677FF;
         display: flex;
         align-items: center;
         justify-content: center;

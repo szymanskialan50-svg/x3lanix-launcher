@@ -1,7 +1,7 @@
 {
-  "productName": "x3lanix lancher",
+  "productName": "LiquidLauncher",
   "version": "0.6.1",
-  "identifier": "net.ccbluex.x3lanix-launcher",
+  "identifier": "net.ccbluex.liquidlauncher",
   "build": {
     "beforeBuildCommand": "bun run build",
     "beforeDevCommand": "bun run dev",
@@ -12,7 +12,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "x3lanix lancher",
+        "title": "LiquidLauncher",
         "label": "main",
         "width": 1000,
         "minWidth": 1000,
@@ -77,7 +77,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU1QkM5MTlDREQ4NkEzNjMKUldSam80YmRuSkc4NVNxS2MzYVZPN1I4a283RkdsS0lPTjVjRWlxQ1JhdzFZUkRtc0c1eEtqSzQK",
       "endpoints": [
-        "https://github.com/CCBlueX/x3lanix lancher/releases/latest/download/latest.json",
+        "https://github.com/CCBlueX/LiquidLauncher/releases/latest/download/latest.json",
         "https://api.liquidbounce.net/api/v1/launcher/releases/{{target}}/{{current_version}}"
       ]
     }

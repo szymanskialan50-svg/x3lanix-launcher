@@ -36,7 +36,7 @@
         {/if}
 
         <div class="help-buttons">
-            <ButtonSetting text="Quick Help" color="#ffffff" on:click={() => openUrl('https://liquidbounce.net/docs/Tutorials/Fixing%20x3lanix-launcher')}></ButtonSetting>
+            <ButtonSetting text="Quick Help" color="#4677ff" on:click={() => openUrl('https://liquidbounce.net/docs/Tutorials/Fixing%20LiquidLauncher')}></ButtonSetting>
             <ButtonSetting text="Contact Support" color="#45a049" on:click={() => openUrl('https://ccbluex.net/contact')}></ButtonSetting>
         </div>
     </div>

@@ -48,7 +48,7 @@
     <ButtonSetting
             text="Manage Account"
             on:click={() => openUrl("https://user.liquidbounce.net")}
-            color="#ffffff"
+            color="#4677FF"
     />
     <ButtonSetting
             text="Logout"
@@ -63,6 +63,6 @@
     <ButtonSetting
             text="Login with LiquidBounce Account"
             on:click={login}
-            color="#ffffff"
+            color="#4677FF"
     />
 {/if}

@@ -23,7 +23,7 @@
     .button {
         background: unset;
         border: none;
-        background-color: #ffffff;
+        background-color: #4677FF;
         color: white;
         font-size: 14px;
         border-radius: 6px;
